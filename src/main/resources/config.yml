@@ -1,0 +1,4 @@
+chatguard:
+  toggle: true
+  filter:
+    - fuck
