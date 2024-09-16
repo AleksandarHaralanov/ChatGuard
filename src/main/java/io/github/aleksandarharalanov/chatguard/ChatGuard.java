@@ -44,7 +44,7 @@ public class ChatGuard extends JavaPlugin {
     public void onDisable() {
         config.saveConfig();
 
-        logInfo(String.format("[%s] v%s Disabled.", pdf.getName(), pdf.getName()));
+        logInfo(String.format("[%s] v%s Disabled.", pdf.getName(), pdf.getVersion()));
     }
 
     public static ChatGuard getInstance() {
