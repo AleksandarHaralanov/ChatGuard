@@ -34,6 +34,13 @@ public class FilterHandler {
         return false;
     }
 
+    public static boolean shouldBlockName(String playerName) {
+        String sanitizedMessage = playerName.toLowerCase();
+        Set<String> whitelistTerms = new HashSet<>(getConfig().getStringList("filter.rules.terms.whitelist", new ArrayList<>()));
+        for (String term : whitelistTerms) sanitizedMessage = sanitizedMessage.replaceAll(term, "");
+        return containsBlacklistedTerms(sanitizedMessage) || matchesRegExPatterns(sanitizedMessage);
+    }
+
     private static boolean containsBlacklistedTerms(String message) {
         Set<String> blacklistTerms = new HashSet<>(getConfig().getStringList("filter.rules.terms.blacklist", new ArrayList<>()));
         String[] messageTerms = message.split("\\s+");
