@@ -9,7 +9,7 @@
 - Logs offenders (via Discord webhook, server console, or local file).
 - Prevents chat message and command spam.
 - Prompts captcha verification on suspected bot-like behavior.
-- Issues temporary mutes (requires [Essentials v2.5.8](#requirements) as of ChatGuard `v4.1.0`).
+- Issues temporary mutes (requires [Essentials v2.5.8](#requirements) as of ChatGuard `v4.1.1`).
 - Enforces escalating penalties via a six-strike tier system.
 - Plays local sound cues for offending players upon detection.
 
@@ -35,7 +35,7 @@ If you'd like additional peace of mind, you're welcome to scan the `.jar` file u
 ## Requirements
 Your server must be running one of the following APIs: CB1060-CB1092, [Project Poseidon](https://github.com/retromcorg/Project-Poseidon) or [UberBukkit](https://github.com/Moresteck/Project-Poseidon-Uberbukkit).
 
-It also needs to be running **Essentials v2.5.8 or newer** (as of ChatGuard `v4.1.0`).<br/>You can download it from [here](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar).
+It also needs to be running **Essentials v2.5.8 or newer** (as of ChatGuard `v4.1.1`).<br/>You can download it from [here](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar).
 
 ---
 ## Usage
@@ -64,7 +64,7 @@ Use PermissionsEx or similar plugins to grant groups the permission, enabling th
 Generates `config.yml` and `strikes.yml` located at `plugins/ChatGuard`.
 
 > [!CAUTION]
-> 🔖`v4.1.0`: If your server is not running **Essentials v2.5.8 or newer**, make sure to download and install it. Without it, the entire plugin will break, and in-game messages will fail to send properly.
+> 🔖`v4.1.1`: If your server is not running **Essentials v2.5.8 or newer**, make sure to download and install it. Without it, the entire plugin will break, and in-game messages will fail to send properly.
 >
 > You can find the download [here](#requirements) in the requirements heading.
 
@@ -138,4 +138,4 @@ filter:               # Filter Configuration
 The default `strikes.yml` configuration file is initially empty. When a player joins for the first time after ChatGuard is installed on the server, they are added to the configuration with 0 strikes. From there, the plugin manages their strikes, incrementing them up to a maximum of 5 as necessary. Read note below on how that works.
 
 > [!NOTE]
-> 🔖`v4.1.0`: Strike tiers will increment only when the filter is enabled, and a disallowed term or matching regex pattern is detected in a message. Otherwise, all strike tiers will default to 0 unless manually modified in the configuration file or through the included command.
+> 🔖`v4.1.1`: Strike tiers will increment only when the filter is enabled, and a disallowed term or matching regex pattern is detected in a message. Otherwise, all strike tiers will default to 0 unless manually modified in the configuration file or through the included command.
