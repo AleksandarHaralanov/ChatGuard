@@ -73,4 +73,8 @@ public class CaptchaHandler {
     public static HashMap<String, String> getPlayerCaptcha() {
         return playerCaptcha;
     }
+
+    public static HashMap<String, LinkedList<String>> getPlayerMessages() {
+        return playerMessages;
+    }
 }
