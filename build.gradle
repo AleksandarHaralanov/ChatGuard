@@ -38,8 +38,14 @@ if (!nameMatcher.find()) {
     throw new GradleException("The 'name' attribute wasn't found in the 'plugin.yml' file.")
 }
 
-if (nameMatcher.find()) pluginName = nameMatcher.group(1)
-else throw new GradleException("The 'name' attribute wasn't found in the 'plugin.yml' file!")
+tasks.named('build') {
+    mustRunAfter 'clean'
+}
+
+tasks.register('cleanBuild') {
+    dependsOn 'clean', 'build'
+    group = 'custom'
+}
 
 jar {
     manifest {
