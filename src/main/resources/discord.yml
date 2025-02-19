@@ -1,0 +1,37 @@
+webhook-url: ""
+
+embed-log:
+  type:
+    chat: false
+    sign: false
+    name: false
+    captcha: false
+  optional:
+    censor: true
+    data:
+      ip-address: true
+      timestamp: true
+
+customize:
+  player-avatar: "https://minotar.net/avatar/%player%.png"
+  type:
+    chat:
+      color: "#FF5555"
+      webhook:
+        name: "ChatGuard - Chat"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo.png"
+    sign:
+      color: "#FFAA00"
+      webhook:
+        name: "ChatGuard - Sign"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Gold.png"
+    name:
+      color: "#FFFF55"
+      webhook:
+        name: "ChatGuard - Name"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Yellow.png"
+    captcha:
+      color: "#AA00AA"
+      webhook:
+        name: "ChatGuard - Captcha"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Dark-Purple.png"

@@ -5,23 +5,24 @@
 **ChatGuard** is a Minecraft plugin designed for servers running version b1.7.3.
 
 - Cancels messages containing blocked terms or matching RegEx patterns.
+- Censors signs containing blocked terms or matching RegEx patterns.
 - Prevents players from joining with usernames containing blocked terms or matching RegEx patterns.
 - Logs offenders (via Discord webhook, server console, or local file).
-- Prevents chat message and command spam.
-- Prompts captcha verification on suspected bot-like behavior.
-- Issues temporary mutes (requires [Essentials v2.5.8](#requirements) as of ChatGuard `v4.1.1`).
+- Implements chat and command rate limiter to decrease spam.
+- Triggers captcha verification on repeated message spam.
+- Issues temporary mutes (requires [Essentials v2.5.8](#Requirements & Optional) as of ChatGuard `v5.0.0`).
 - Enforces escalating penalties via a six-strike tier system.
-- Plays local sound cues for offending players upon detection.
+- Plays local audio cues for offending players upon detection.
 
 The plugin is entirely configurable.
 
 ---
-## Contributing Code & Reporting Issues
+## Contributions, Suggestions, and Issues
 Consider helping ChatGuard become even more versatile and robust.
 
-Visit the [CONTRIBUTING](https://github.com/AleksandarHaralanov/ChatGuard/blob/master/.github/CONTRIBUTING.md) guide for details on how to get started and where to focus your efforts.
+It is **highly recommended** to visit the [CONTRIBUTING](https://github.com/AleksandarHaralanov/ChatGuard/blob/master/.github/CONTRIBUTING.md) guide for details on how to get started and where to focus your efforts.
 
-For any issues with the plugin, or suggestions, please report them [here](https://github.com/AleksandarHaralanov/ChatGuard/issues).
+For any issues with the plugin, or suggestions, please submit them [here](https://github.com/AleksandarHaralanov/ChatGuard/issues).
 
 ---
 ## Download
@@ -32,10 +33,10 @@ The plugin is fully open-source and transparent.<br/>
 If you'd like additional peace of mind, you're welcome to scan the `.jar` file using [VirusTotal](https://www.virustotal.com/gui/home/upload).
 
 ---
-## Requirements
+## Requirements & Optional
 Your server must be running one of the following APIs: CB1060-CB1092, [Project Poseidon](https://github.com/retromcorg/Project-Poseidon) or [UberBukkit](https://github.com/Moresteck/Project-Poseidon-Uberbukkit).
 
-It also needs to be running **Essentials v2.5.8 or newer** (as of ChatGuard `v4.1.1`).<br/>You can download it from [here](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar).
+You can download **Essentials v2.5.8** from [here](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar).
 
 ---
 ## Usage
@@ -61,26 +62,22 @@ Use PermissionsEx or similar plugins to grant groups the permission, enabling th
 
 ---
 ## Configurations
-Generates `config.yml` and `strikes.yml` located at `plugins/ChatGuard`.
+ChatGuard generates two configuration files using the default settings in the **config** directory.
 
-> [!CAUTION]
-> 🔖`v4.1.1`: If your server is not running **Essentials v2.5.8 or newer**, make sure to download and install it. Without it, the entire plugin will break, and in-game messages will fail to send properly.
->
-> You can find the download [here](#requirements) in the requirements heading.
+Additionally, it creates two data files, `captchas.yml` and `strikes.yml`, in the **data** directory.
 
-### Config
-This is the default `config.yml` configuration file:
+#### Main Config `config.yml`:
 ```yaml
-miscellaneous:        # QoL Configurations
-  sound-cues: true    # Offending player hears a local sound cue upon detection
+miscellaneous:        # Misc Configurations
+  audio-cues: true    # Offending player hears a local audio cue upon detection
 
 spam-prevention:      # Spam Prevention Configuration
   enabled:            # Toggles spam prevention for chat messages and commands
-    message: true
+    chat: true
     command: true
   warn-player: true   # Warns offending player upon detection
   cooldown-ms:        # Cooldown durations in milliseconds for strike tiers
-    message:
+    chat:
       s0: 1000
       s1: 2000
       s2: 3000
@@ -101,24 +98,19 @@ captcha:              # Captcha Configuration
   code:               # Captcha characters and length
     characters: "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
     length: 5
-  log:                # Logs captcha triggers to:
-    console: true     # Server console
-    local-file: true  # Local file
-    discord-webhook:  # Discord webhook by an embed
-      enabled: false  # Toggles Discord webhook
-      url: ""         # Discord webhook URL
+  log-console: true   # Log captcha trigger to server console
   whitelist: []       # Allowed captcha bypass terms for sanitizing
 
 filter:               # Filter Configuration
-  enabled: true       # Toggles filtering of chat messages and player usernames
+  enabled:            # Toggles filtration for chat messages, player usernames, and signs
+    chat: true
+    sign: true
+    name: true
   warn-player: true   # Warns offending player upon detection
-  log:                # Logs captcha triggers to:
+  log:                # Log filter trigger to:
     console: true     # Server console
     local-file: true  # Local file
-    discord-webhook:  # Discord webhook by an embed
-      enabled: false  # Toggles Discord webhook
-      url: ""         # Discord webhook URL
-  mute:               # Mute Configuration
+  essentials-mute:    # Essentials Mute Configuration
     enabled: true     # Toggles automatic mutes upon filter detection
     duration:         # Mute durations for strike tiers
       s0: "30m"
@@ -133,9 +125,58 @@ filter:               # Filter Configuration
       whitelist: []   # Allowed chat message and player username bypass terms for sanitizing
       blacklist: []   # Disallowed chat message and player username bypass terms
 ```
+<br/>
 
-### Strikes
-The default `strikes.yml` configuration file is initially empty. When a player joins for the first time after ChatGuard is installed on the server, they are added to the configuration with 0 strikes. From there, the plugin manages their strikes, incrementing them up to a maximum of 5 as necessary. Read note below on how that works.
+#### Discord Embed Config `discord.yml`:
+```yaml
+webhook-url: ""          # Discord Webhook URL
 
-> [!NOTE]
-> 🔖`v4.1.1`: Strike tiers will increment only when the filter is enabled, and a disallowed term or matching regex pattern is detected in a message. Otherwise, all strike tiers will default to 0 unless manually modified in the configuration file or through the included command.
+embed-log:               # Embed Configurations
+  type:                  # Logs to embed
+    chat: false
+    sign: false
+    name: false
+    captcha: false
+  optional:
+    censor: true         # Censors sensitive data, such as IP addresses and the filter trigger in the embed
+    data:
+      ip-address: true   # Includes player IP address in the embed
+      timestamp: true    # Includes timestamp in the embed
+
+customize:               # Embed customization options
+  player-avatar: "https://minotar.net/avatar/%player%.png"   # Place %player% where the player's username would usually go
+  type:                  # Various embed type log customizations
+    chat:
+      color: "#FF5555"
+      webhook:
+        name: "ChatGuard - Chat"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo.png"
+    sign:
+      color: "#FFAA00"
+      webhook:
+        name: "ChatGuard - Sign"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Gold.png"
+    name:
+      color: "#FFFF55"
+      webhook:
+        name: "ChatGuard - Name"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Yellow.png"
+    captcha:
+      color: "#AA00AA"
+      webhook:
+        name: "ChatGuard - Captcha"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Dark-Purple.png"
+```
+
+> [!CAUTION]  
+> If your server is not running **Essentials v2.5.8**, you must do one of the following:
+> - **Disable Essentials mute support** by setting `filter.essentials-mute.enabled` to `false` in `config/config.yml`.
+> - **Install Essentials** to use the temporary mute feature.
+>   - You can download **Essentials v2.5.8** from [here](#Requirements & Optional).
+> 
+> Without one of the two, ChatGuard could break, and in-game messages might fail to send.
+
+> [!NOTE]  
+> Strike tiers increment only when the filter is enabled and a disallowed term or matching regex pattern is detected.
+>
+> Otherwise, all strike tiers default to `0` unless manually modified in `data/strikes.yml` or via the staff command.

@@ -1,13 +1,13 @@
 miscellaneous:
-  sound-cues: true
+  audio-cues: true
 
 spam-prevention:
   enabled:
-    message: true
+    chat: true
     command: true
   warn-player: true
   cooldown-ms:
-    message:
+    chat:
       s0: 1000
       s1: 2000
       s2: 3000
@@ -28,24 +28,19 @@ captcha:
   code:
     characters: "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
     length: 5
-  log:
-    console: true
-    local-file: true
-    discord-webhook:
-      enabled: false
-      url: ""
+  log-console: true
   whitelist: []
 
 filter:
-  enabled: true
+  enabled:
+    chat: true
+    sign: true
+    name: true
   warn-player: true
   log:
     console: true
     local-file: true
-    discord-webhook:
-      enabled: false
-      url: ""
-  mute:
+  essentials-mute:
     enabled: true
     duration:
       s0: "30m"

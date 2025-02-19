@@ -1,15 +1,15 @@
 main: io.github.aleksandarharalanov.chatguard.ChatGuard
-version: 4.1.1
+version: 5.0.0
 name: ChatGuard
 author: Beezle
 website: github.com/AleksandarHaralanov/ChatGuard
-description: Prevents messages and usernames containing blocked terms or matching RegEx patterns, enforces mutes, stops chat and command spam, prompts captcha verification, logs actions, and applies escalating penalties.
+description: Prevents messages, usernames, and signs containing blocked terms or matching RegEx patterns, enforces mutes, stops chat and command spam, prompts captcha verification, logs actions, and applies escalating penalties.
 softdepend: [Essentials]
 
 commands:
   chatguard:
-    description: All of ChatGuard's features in one command.
-    usage: /chatguard
+    description: ChatGuard main command.
+    usage: /<command>
     aliases: [cg]
 
 permissions:
@@ -27,5 +27,5 @@ permissions:
     description: Allows player to reload and modify the ChatGuard configuration.
     default: op
   chatguard.captcha:
-    description: Allows player to be notified when someone is prompted a captcha verification.
+    description: Allows player to be notified when someone triggers a captcha verification.
     default: op
