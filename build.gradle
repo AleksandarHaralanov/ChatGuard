@@ -17,10 +17,7 @@ File ymlFile = file('src/main/resources/plugin.yml') as File
 
 if (!ymlFile.exists()) throw new GradleException("The 'plugin.yml' file does not exist in 'src/main/resources'!")
 
-String pluginVersion
-String pluginName
 String ymlText = ymlFile.text
-
 Matcher mainMatcher = (ymlText =~ /main:\s*(\S+)/)
 Matcher versionMatcher = (ymlText =~ /version:\s*(\S+)/)
 Matcher nameMatcher = (ymlText =~ /name:\s*(\S+)/)
