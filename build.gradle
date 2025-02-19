@@ -50,10 +50,10 @@ tasks.register('cleanBuild') {
 jar {
     manifest {
         attributes(
-                'Implementation-Title': pluginName,
-                'Implementation-Version': pluginVersion
+                'Implementation-Title': "${project.name}",
+                'Implementation-Version': "${project.version}"
         )
     }
-    archiveVersion.set(pluginVersion)
-    archiveBaseName.set(pluginName)
+
+    archiveFileName = "${project.name}-${project.version}.jar"
 }
