@@ -1,19 +1,15 @@
 package io.github.aleksandarharalanov.chatguard;
 
 import io.github.aleksandarharalanov.chatguard.command.ChatGuardCommand;
-import io.github.aleksandarharalanov.chatguard.listener.player.PlayerChatListener;
-import io.github.aleksandarharalanov.chatguard.listener.player.PlayerCommandPreprocessListener;
-import io.github.aleksandarharalanov.chatguard.listener.player.PlayerJoinListener;
-import io.github.aleksandarharalanov.chatguard.listener.player.PlayerQuitListener;
-import io.github.aleksandarharalanov.chatguard.util.ConfigUtil;
-import io.github.aleksandarharalanov.chatguard.util.LoggerUtil;
+import io.github.aleksandarharalanov.chatguard.listener.block.SignChangeListener;
+import io.github.aleksandarharalanov.chatguard.listener.player.*;
+import io.github.aleksandarharalanov.chatguard.util.config.ConfigUtil;
+import io.github.aleksandarharalanov.chatguard.util.log.LogUtil;
+import io.github.aleksandarharalanov.chatguard.util.log.UpdateUtil;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import static io.github.aleksandarharalanov.chatguard.util.LoggerUtil.logInfo;
-import static io.github.aleksandarharalanov.chatguard.util.UpdateUtil.checkForUpdates;
 
 public class ChatGuard extends JavaPlugin {
 
