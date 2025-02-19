@@ -66,19 +66,18 @@ ChatGuard generates two configuration files using the default settings in the **
 
 Additionally, it creates two data files, `captchas.yml` and `strikes.yml`, in the **data** directory.
 
-### Config
-This is the default `config.yml` configuration file:
+#### Main Config `config.yml`:
 ```yaml
-miscellaneous:        # QoL Configurations
-  sound-cues: true    # Offending player hears a local sound cue upon detection
+miscellaneous:        # Misc Configurations
+  audio-cues: true    # Offending player hears a local audio cue upon detection
 
 spam-prevention:      # Spam Prevention Configuration
   enabled:            # Toggles spam prevention for chat messages and commands
-    message: true
+    chat: true
     command: true
   warn-player: true   # Warns offending player upon detection
   cooldown-ms:        # Cooldown durations in milliseconds for strike tiers
-    message:
+    chat:
       s0: 1000
       s1: 2000
       s2: 3000
@@ -99,24 +98,19 @@ captcha:              # Captcha Configuration
   code:               # Captcha characters and length
     characters: "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
     length: 5
-  log:                # Logs captcha triggers to:
-    console: true     # Server console
-    local-file: true  # Local file
-    discord-webhook:  # Discord webhook by an embed
-      enabled: false  # Toggles Discord webhook
-      url: ""         # Discord webhook URL
+  log-console: true   # Log captcha trigger to server console
   whitelist: []       # Allowed captcha bypass terms for sanitizing
 
 filter:               # Filter Configuration
-  enabled: true       # Toggles filtering of chat messages and player usernames
+  enabled:            # Toggles filtration for chat messages, player usernames, and signs
+    chat: true
+    sign: true
+    name: true
   warn-player: true   # Warns offending player upon detection
-  log:                # Logs captcha triggers to:
+  log:                # Log filter trigger to:
     console: true     # Server console
     local-file: true  # Local file
-    discord-webhook:  # Discord webhook by an embed
-      enabled: false  # Toggles Discord webhook
-      url: ""         # Discord webhook URL
-  mute:               # Mute Configuration
+  essentials-mute:    # Essentials Mute Configuration
     enabled: true     # Toggles automatic mutes upon filter detection
     duration:         # Mute durations for strike tiers
       s0: "30m"
@@ -131,9 +125,56 @@ filter:               # Filter Configuration
       whitelist: []   # Allowed chat message and player username bypass terms for sanitizing
       blacklist: []   # Disallowed chat message and player username bypass terms
 ```
+<br/>
 
-### Strikes
-The default `strikes.yml` configuration file is initially empty. When a player joins for the first time after ChatGuard is installed on the server, they are added to the configuration with 0 strikes. From there, the plugin manages their strikes, incrementing them up to a maximum of 5 as necessary. Read note below on how that works.
+#### Discord Embed Config `discord.yml`:
+```yaml
+webhook-url: ""          # Discord Webhook URL
+
+embed-log:               # Embed Configurations
+  type:                  # Logs to embed
+    chat: false
+    sign: false
+    name: false
+    captcha: false
+  optional:
+    censor: true         # Censors sensitive data, such as IP addresses and the filter trigger in the embed
+    data:
+      ip-address: true   # Includes player IP address in the embed
+      timestamp: true    # Includes timestamp in the embed
+
+customize:               # Embed customization options
+  player-avatar: "https://minotar.net/avatar/%player%.png"   # Place %player% where the player's username would usually go
+  type:                  # Various embed type log customizations
+    chat:
+      color: "#FF5555"
+      webhook:
+        name: "ChatGuard - Chat"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo.png"
+    sign:
+      color: "#FFAA00"
+      webhook:
+        name: "ChatGuard - Sign"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Gold.png"
+    name:
+      color: "#FFFF55"
+      webhook:
+        name: "ChatGuard - Name"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Yellow.png"
+    captcha:
+      color: "#AA00AA"
+      webhook:
+        name: "ChatGuard - Captcha"
+        icon: "https://raw.githubusercontent.com/AleksandarHaralanov/ChatGuard/refs/heads/master/assets/ChatGuard-Logo-Dark-Purple.png"
+```
+
+> [!CAUTION]  
+> If your server is not running **Essentials v2.5.8**, you must do one of the following:
+> - **Disable Essentials mute support** by setting `filter.essentials-mute.enabled` to `false` in `config/config.yml`.
+> - **Install Essentials** to use the temporary mute feature.
+>   - You can download **Essentials v2.5.8** from [here](#Requirements & Optional).
+> 
+> Without one of the two, ChatGuard could break, and in-game messages might fail to send.
 
 > [!NOTE]  
 > Strike tiers increment only when the filter is enabled and a disallowed term or matching regex pattern is detected.
