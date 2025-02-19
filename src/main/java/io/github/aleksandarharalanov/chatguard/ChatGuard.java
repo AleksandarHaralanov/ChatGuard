@@ -21,7 +21,7 @@ public class ChatGuard extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        checkForUpdates(this, "https://api.github.com/repos/AleksandarHaralanov/ChatGuard/releases/latest");
+        UpdateUtil.checkAvailablePluginUpdates(this, "https://api.github.com/repos/AleksandarHaralanov/ChatGuard/releases/latest");
 
         plugin = this;
 
