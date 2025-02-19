@@ -19,7 +19,9 @@ public class ChatGuard extends JavaPlugin {
 
     private static ChatGuard plugin;
     private static ConfigUtil config;
+    private static ConfigUtil discord;
     private static ConfigUtil strikes;
+    private static ConfigUtil captchas;
 
     @Override
     public void onEnable() {
@@ -29,9 +31,13 @@ public class ChatGuard extends JavaPlugin {
 
         config = new ConfigUtil(this, "config.yml");
         config.load();
+        discord = new ConfigUtil(this, "config/discord.yml");
+        discord.load();
 
         strikes = new ConfigUtil(this, "strikes.yml");
         strikes.load();
+        captchas = new ConfigUtil(this, "data/captchas.yml");
+        captchas.load();
 
         final LoggerUtil log = new LoggerUtil(this, "log.txt");
         log.initializeLog();
@@ -67,7 +73,15 @@ public class ChatGuard extends JavaPlugin {
         return config;
     }
 
+    public static ConfigUtil getDiscord() {
+        return discord;
+    }
+
     public static ConfigUtil getStrikes() {
         return strikes;
+    }
+
+    public static ConfigUtil getCaptchas() {
+        return captchas;
     }
 }
