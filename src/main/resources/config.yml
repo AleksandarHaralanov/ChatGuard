@@ -28,12 +28,7 @@ captcha:
   code:
     characters: "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
     length: 5
-  log:
-    console: true
-    local-file: true
-    discord-webhook:
-      enabled: false
-      url: ""
+  log-console: true
   whitelist: []
 
 filter:
