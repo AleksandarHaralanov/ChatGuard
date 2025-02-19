@@ -32,7 +32,10 @@ captcha:
   whitelist: []
 
 filter:
-  enabled: true
+  enabled:
+    chat: true
+    sign: true
+    name: true
   warn-player: true
   log:
     console: true
