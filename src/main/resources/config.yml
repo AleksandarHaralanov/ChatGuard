@@ -1,13 +1,13 @@
 miscellaneous:
-  sound-cues: true
+  audio-cues: true
 
 spam-prevention:
   enabled:
-    message: true
+    chat: true
     command: true
   warn-player: true
   cooldown-ms:
-    message:
+    chat:
       s0: 1000
       s1: 2000
       s2: 3000
@@ -42,10 +42,7 @@ filter:
   log:
     console: true
     local-file: true
-    discord-webhook:
-      enabled: false
-      url: ""
-  mute:
+  essentials-mute:
     enabled: true
     duration:
       s0: "30m"
