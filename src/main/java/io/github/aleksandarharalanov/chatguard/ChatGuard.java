@@ -55,6 +55,11 @@ public class ChatGuard extends JavaPlugin {
         pM.registerEvent(Type.PLAYER_JOIN, pJL, Priority.Lowest, this);
         pM.registerEvent(Type.PLAYER_QUIT, pQL, Priority.Lowest, this);
 
+        // Block Listeners
+        final SignChangeListener sCL = new SignChangeListener();
+        pM.registerEvent(Type.SIGN_CHANGE, sCL, Priority.Lowest, this);
+
+        // Main Command
         final ChatGuardCommand command = new ChatGuardCommand(this);
         getCommand("chatguard").setExecutor(command);
 
