@@ -47,9 +47,10 @@ public class ChatGuard extends JavaPlugin {
         final PlayerCommandPreprocessListener pCPL = new PlayerCommandPreprocessListener();
         final PlayerChatListener pCL = new PlayerChatListener();
         final PlayerJoinListener pJL = new PlayerJoinListener();
+        final PlayerLoginListener pLL = new PlayerLoginListener();
         final PlayerQuitListener pQL = new PlayerQuitListener();
         pM.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, pCPL, Priority.Lowest, this);
-        pM.registerEvent(Type.PLAYER_PRELOGIN, pJL, Priority.Lowest, this);
+        pM.registerEvent(Type.PLAYER_LOGIN, pLL, Priority.Lowest, this);
         pM.registerEvent(Type.PLAYER_CHAT, pCL, Priority.Lowest, this);
         pM.registerEvent(Type.PLAYER_JOIN, pJL, Priority.Normal, this);
         pM.registerEvent(Type.PLAYER_JOIN, pJL, Priority.Normal, this);
