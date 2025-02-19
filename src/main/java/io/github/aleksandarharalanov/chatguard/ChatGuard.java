@@ -25,20 +25,25 @@ public class ChatGuard extends JavaPlugin {
 
         plugin = this;
 
-        config = new ConfigUtil(this, "config.yml");
+        // Configurations
+        config = new ConfigUtil(this, "config/config.yml");
         config.load();
         discord = new ConfigUtil(this, "config/discord.yml");
         discord.load();
 
-        strikes = new ConfigUtil(this, "strikes.yml");
+        // Data
+        strikes = new ConfigUtil(this, "data/strikes.yml");
         strikes.load();
         captchas = new ConfigUtil(this, "data/captchas.yml");
         captchas.load();
 
-        final LoggerUtil log = new LoggerUtil(this, "log.txt");
-        log.initializeLog();
+        // Local File Log
+        final LogUtil log = new LogUtil(this, "log.txt");
+        log.initializeLogFile();
 
         PluginManager pM = getServer().getPluginManager();
+
+        // Player Listeners
         final PlayerCommandPreprocessListener pCPL = new PlayerCommandPreprocessListener();
         final PlayerChatListener pCL = new PlayerChatListener();
         final PlayerJoinListener pJL = new PlayerJoinListener();
