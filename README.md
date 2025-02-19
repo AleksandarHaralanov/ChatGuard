@@ -5,23 +5,24 @@
 **ChatGuard** is a Minecraft plugin designed for servers running version b1.7.3.
 
 - Cancels messages containing blocked terms or matching RegEx patterns.
+- Censors signs containing blocked terms or matching RegEx patterns.
 - Prevents players from joining with usernames containing blocked terms or matching RegEx patterns.
 - Logs offenders (via Discord webhook, server console, or local file).
-- Prevents chat message and command spam.
-- Prompts captcha verification on suspected bot-like behavior.
-- Issues temporary mutes (requires [Essentials v2.5.8](#requirements) as of ChatGuard `v4.1.1`).
+- Implements chat and command rate limiter to decrease spam.
+- Triggers captcha verification on repeated message spam.
+- Issues temporary mutes (requires [Essentials v2.5.8](#Requirements & Optional) as of ChatGuard `v5.0.0`).
 - Enforces escalating penalties via a six-strike tier system.
-- Plays local sound cues for offending players upon detection.
+- Plays local audio cues for offending players upon detection.
 
 The plugin is entirely configurable.
 
 ---
-## Contributing Code & Reporting Issues
+## Contributions, Suggestions, and Issues
 Consider helping ChatGuard become even more versatile and robust.
 
-Visit the [CONTRIBUTING](https://github.com/AleksandarHaralanov/ChatGuard/blob/master/.github/CONTRIBUTING.md) guide for details on how to get started and where to focus your efforts.
+It is **highly recommended** to visit the [CONTRIBUTING](https://github.com/AleksandarHaralanov/ChatGuard/blob/master/.github/CONTRIBUTING.md) guide for details on how to get started and where to focus your efforts.
 
-For any issues with the plugin, or suggestions, please report them [here](https://github.com/AleksandarHaralanov/ChatGuard/issues).
+For any issues with the plugin, or suggestions, please submit them [here](https://github.com/AleksandarHaralanov/ChatGuard/issues).
 
 ---
 ## Download
@@ -32,10 +33,10 @@ The plugin is fully open-source and transparent.<br/>
 If you'd like additional peace of mind, you're welcome to scan the `.jar` file using [VirusTotal](https://www.virustotal.com/gui/home/upload).
 
 ---
-## Requirements
+## Requirements & Optional
 Your server must be running one of the following APIs: CB1060-CB1092, [Project Poseidon](https://github.com/retromcorg/Project-Poseidon) or [UberBukkit](https://github.com/Moresteck/Project-Poseidon-Uberbukkit).
 
-It also needs to be running **Essentials v2.5.8 or newer** (as of ChatGuard `v4.1.1`).<br/>You can download it from [here](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar).
+You can download **Essentials v2.5.8** from [here](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar).
 
 ---
 ## Usage
@@ -61,12 +62,9 @@ Use PermissionsEx or similar plugins to grant groups the permission, enabling th
 
 ---
 ## Configurations
-Generates `config.yml` and `strikes.yml` located at `plugins/ChatGuard`.
+ChatGuard generates two configuration files using the default settings in the **config** directory.
 
-> [!CAUTION]
-> 🔖`v4.1.1`: If your server is not running **Essentials v2.5.8 or newer**, make sure to download and install it. Without it, the entire plugin will break, and in-game messages will fail to send properly.
->
-> You can find the download [here](#requirements) in the requirements heading.
+Additionally, it creates two data files, `captchas.yml` and `strikes.yml`, in the **data** directory.
 
 ### Config
 This is the default `config.yml` configuration file:
@@ -137,5 +135,7 @@ filter:               # Filter Configuration
 ### Strikes
 The default `strikes.yml` configuration file is initially empty. When a player joins for the first time after ChatGuard is installed on the server, they are added to the configuration with 0 strikes. From there, the plugin manages their strikes, incrementing them up to a maximum of 5 as necessary. Read note below on how that works.
 
-> [!NOTE]
-> 🔖`v4.1.1`: Strike tiers will increment only when the filter is enabled, and a disallowed term or matching regex pattern is detected in a message. Otherwise, all strike tiers will default to 0 unless manually modified in the configuration file or through the included command.
+> [!NOTE]  
+> Strike tiers increment only when the filter is enabled and a disallowed term or matching regex pattern is detected.
+>
+> Otherwise, all strike tiers default to `0` unless manually modified in `data/strikes.yml` or via the staff command.
