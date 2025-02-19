@@ -2,90 +2,83 @@ package io.github.aleksandarharalanov.chatguard.listener.player;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import io.github.aleksandarharalanov.chatguard.ChatGuard;
+import io.github.aleksandarharalanov.chatguard.core.misc.TimeFormatter;
+import io.github.aleksandarharalanov.chatguard.core.security.captcha.CaptchaDetector;
+import io.github.aleksandarharalanov.chatguard.core.security.captcha.CaptchaHandler;
+import io.github.aleksandarharalanov.chatguard.core.security.filter.ContentFilter;
+import io.github.aleksandarharalanov.chatguard.core.security.spam.ChatRateLimiter;
+import io.github.aleksandarharalanov.chatguard.util.auth.AccessUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerListener;
 
-import java.util.Arrays;
-
-import static io.github.aleksandarharalanov.chatguard.ChatGuard.getConfig;
-import static io.github.aleksandarharalanov.chatguard.handler.CaptchaHandler.checkPlayerCaptcha;
-import static io.github.aleksandarharalanov.chatguard.handler.CaptchaHandler.isPlayerCaptchaActive;
-import static io.github.aleksandarharalanov.chatguard.handler.FilterHandler.checkPlayerMessage;
-import static io.github.aleksandarharalanov.chatguard.handler.spam.MessageSpamHandler.isPlayerMessageSpamming;
-import static io.github.aleksandarharalanov.chatguard.util.AccessUtil.hasPermission;
-import static io.github.aleksandarharalanov.chatguard.util.ColorUtil.translate;
-import static io.github.aleksandarharalanov.chatguard.util.LoggerUtil.logWarning;
-import static org.bukkit.Bukkit.getServer;
-
 public class PlayerChatListener extends PlayerListener {
 
     @Override
-    public void onPlayerChat(final PlayerChatEvent event) {
+    public void onPlayerChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
 
-        Essentials essentials = (Essentials) getServer().getPluginManager().getPlugin("Essentials");
+        if (isPlayerEssentialsMuted(player, event)) return;
+        if (hasBypassPermission(player)) return;
+        if (handleActiveCaptchaVerification(player, event)) return;
+        if (handleSpamPrevention(player, event)) return;
+        if (handleChatFiltering(player, event)) return;
+        if (handleCaptchaTriggerCheck(player, event)) return;
+    }
+
+    private static boolean isPlayerEssentialsMuted(Player player, PlayerChatEvent event) {
+        Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
         if (essentials != null && essentials.isEnabled()) {
             User user = essentials.getUser(player.getName());
             if (user.isMuted()) {
+                TimeFormatter.printFormattedMuteDuration(user);
                 event.setCancelled(true);
-
-                long remainingMillis = user.getMuteTimeout() - System.currentTimeMillis();
-                int seconds = (int) ((remainingMillis / 1000) % 60);
-                int minutes = (int) ((remainingMillis / (1000 * 60)) % 60);
-                int hours = (int) ((remainingMillis / (1000 * 60 * 60)) % 24);
-                int days = (int) (remainingMillis / (1000 * 60 * 60 * 24));
-
-                StringBuilder timeMessage = new StringBuilder("&7");
-                if (days > 0) timeMessage.append(days).append(" day(s)");
-                if (hours > 0) {
-                    if (timeMessage.length() > 2) timeMessage.append(", ");
-                    timeMessage.append(hours).append(" hour(s)");
-                }
-                if (minutes > 0) {
-                    if (timeMessage.length() > 2) timeMessage.append(", ");
-                    timeMessage.append(minutes).append(" minute(s)");
-                }
-                if (seconds > 0) {
-                    if (timeMessage.length() > 2) timeMessage.append(", ");
-                    timeMessage.append(seconds).append(" second(s)");
-                }
-
-                player.sendMessage(translate(timeMessage.toString()));
-                return;
+                return true;
             }
         }
+        return false;
+    }
 
-        if (hasPermission(player, "chatguard.bypass")) return;
+    private static boolean hasBypassPermission(Player player) {
+        return AccessUtil.senderHasPermission(player, "chatguard.bypass");
+    }
 
-        boolean isCaptchaEnabled = getConfig().getBoolean("captcha.enabled", true);
-        if (isCaptchaEnabled)
-            if (isPlayerCaptchaActive(player)) {
-                event.setCancelled(true);
-                return;
-            }
-
-        boolean isMessageSpamPreventionEnabled = getConfig().getBoolean("spam-prevention.enabled.message", true);
-        if (isMessageSpamPreventionEnabled)
-            if (isPlayerMessageSpamming(player)) {
-                event.setCancelled(true);
-                return;
-            }
-
-        boolean isFilterEnabled = getConfig().getBoolean("filter.enabled", true);
-        if (isFilterEnabled) {
-            try {
-                if (checkPlayerMessage(player, event.getMessage())) {
-                    event.setCancelled(true);
-                    return;
-                }
-            } catch (Exception e) {
-                logWarning(Arrays.toString(e.getStackTrace()));
-            }
+    private static boolean handleActiveCaptchaVerification(Player player, PlayerChatEvent event) {
+        boolean isCaptchaEnabled = ChatGuard.getConfig().getBoolean("captcha.enabled", true);
+        if (isCaptchaEnabled && CaptchaHandler.doesPlayerHaveActiveCaptcha(player)) {
+            event.setCancelled(true);
+            return true;
         }
+        return false;
+    }
 
-        if (isCaptchaEnabled)
-            if (checkPlayerCaptcha(player, event.getMessage()))
-                event.setCancelled(true);
+    private static boolean handleSpamPrevention(Player player, PlayerChatEvent event) {
+        boolean isChatSpamPreventionEnabled = ChatGuard.getConfig().getBoolean("spam-prevention.enabled.chat", true);
+        if (isChatSpamPreventionEnabled && ChatRateLimiter.isPlayerChatSpamming(player)) {
+            event.setCancelled(true);
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean handleChatFiltering(Player player, PlayerChatEvent event) {
+        boolean isChatFilterEnabled = ChatGuard.getConfig().getBoolean("filter.enabled.chat", true);
+        if (isChatFilterEnabled && ContentFilter.isChatContentBlocked(player, event.getMessage())) {
+            event.setCancelled(true);
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean handleCaptchaTriggerCheck(Player player, PlayerChatEvent event) {
+        boolean isCaptchaEnabled = ChatGuard.getConfig().getBoolean("captcha.enabled", true);
+        if (isCaptchaEnabled && CaptchaDetector.doesPlayerTriggerCaptcha(player.getName(), event.getMessage())) {
+            CaptchaHandler.processCaptchaTrigger(player, event.getMessage());
+            event.setCancelled(true);
+            return true;
+        }
+        return false;
     }
 }
