@@ -40,7 +40,7 @@ filter:
   log:
     console: true
     local-file: true
-  essentials-mute:
+  auto-mute:
     enabled: true
     duration:
       s0: "30m"

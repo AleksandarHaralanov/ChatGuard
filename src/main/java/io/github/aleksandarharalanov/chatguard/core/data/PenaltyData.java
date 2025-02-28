@@ -17,14 +17,14 @@ public final class PenaltyData {
 
     public static String getMuteDuration(String playerName) {
         return ChatGuard.getConfig().getString(String.format(
-                "filter.essentials-mute.duration.s%d",
+                "filter.auto-mute.duration.s%d",
                 ChatGuard.getStrikes().getInt(playerName, 0)
         ));
     }
 
     public static String getMuteDuration(Player player) {
         return ChatGuard.getConfig().getString(String.format(
-                "filter.essentials-mute.duration.s%d",
+                "filter.auto-mute.duration.s%d",
                 ChatGuard.getStrikes().getInt(player.getName(), 0)
         ));
     }

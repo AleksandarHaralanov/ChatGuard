@@ -4,7 +4,7 @@ name: ChatGuard
 author: Beezle
 website: github.com/AleksandarHaralanov/ChatGuard
 description: Prevents messages, usernames, and signs containing blocked terms or matching RegEx patterns, enforces mutes, stops chat and command spam, prompts captcha verification, logs actions, and applies escalating penalties.
-softdepend: [Essentials]
+softdepend: [Essentials, ZCore]
 
 commands:
   chatguard:

@@ -24,7 +24,7 @@ public final class ContentHandler {
         ConsoleLogger.log(logType, player, content);
         FileLogger.log(logType, player, content);
         DiscordLogger.log(logType, player, content, trigger);
-        MuteEnforcer.processEssentialsMute(logType, player);
+        MuteEnforcer.processMute(logType, player);
         StrikeEnforcer.incrementStrikeTier(logType, player);
     }
 

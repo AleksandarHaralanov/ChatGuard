@@ -1,36 +1,49 @@
 package io.github.aleksandarharalanov.chatguard.core.security.penalty;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.Util;
 import io.github.aleksandarharalanov.chatguard.ChatGuard;
 import io.github.aleksandarharalanov.chatguard.core.data.PenaltyData;
 import io.github.aleksandarharalanov.chatguard.core.log.LogAttribute;
 import io.github.aleksandarharalanov.chatguard.core.log.LogType;
+import io.github.aleksandarharalanov.chatguard.core.misc.TimeFormatter;
 import io.github.aleksandarharalanov.chatguard.util.misc.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 
 public final class MuteEnforcer {
 
+    public static final MuteHandler muteHandler;
+
+    static {
+        PluginManager pM = Bukkit.getServer().getPluginManager();
+        if (pM.getPlugin("Essentials") != null) {
+            muteHandler = new EssentialsMuteHandler((Essentials) pM.getPlugin("Essentials"));
+        } else if (pM.getPlugin("ZCore") != null) {
+            muteHandler = new ZCoreMuteHandler();
+        } else {
+            muteHandler = null;
+        }
+    }
+
     private MuteEnforcer() {}
 
-    public static void processEssentialsMute(LogType logType, Player player) {
-        boolean isEssentialsMuteEnabled = ChatGuard.getConfig().getBoolean("filter.essentials-mute.enabled", true);
-        if (!isEssentialsMuteEnabled) return;
+    public static void processMute(LogType logType, Player player) {
+        boolean isAutomaticMuteEnabled = ChatGuard.getConfig().getBoolean("filter.auto-mute.enabled", true);
+        if (!isAutomaticMuteEnabled) return;
 
         if (!logType.hasAttribute(LogAttribute.MUTE) || logType == LogType.NAME) return;
 
-        Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-        if (essentials == null || !essentials.isEnabled()) return;
+        if (muteHandler == null) return;
 
-        User user = essentials.getUser(player.getName());
         try {
-            user.setMuteTimeout(Util.parseDateDiff(PenaltyData.getMuteDuration(player), true));
+            muteHandler.setUserMuteTimeout(
+                    player.getName(),
+                    TimeFormatter.parseDateDiff(PenaltyData.getMuteDuration(player), true));
         } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
-        user.setMuted(true);
 
         Bukkit.getServer().broadcastMessage(ColorUtil.translateColorCodes(String.format(
                 "&c[ChatGuard] %s muted for %s. by system; content has bad words.",

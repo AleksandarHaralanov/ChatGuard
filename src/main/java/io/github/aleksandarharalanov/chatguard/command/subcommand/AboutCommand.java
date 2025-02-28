@@ -21,7 +21,8 @@ public final class AboutCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Contributors: If you've contributed code, you can add your name here to be credited
         List<String> contributors = Arrays.asList(
-                "moderator_man"
+                "moderator_man",
+                "zavdav"
         );
         AboutUtil.aboutPlugin(sender, plugin, contributors);
         return true;

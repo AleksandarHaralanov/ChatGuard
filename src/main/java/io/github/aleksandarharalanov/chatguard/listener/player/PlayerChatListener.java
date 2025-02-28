@@ -1,15 +1,13 @@
 package io.github.aleksandarharalanov.chatguard.listener.player;
 
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 import io.github.aleksandarharalanov.chatguard.ChatGuard;
 import io.github.aleksandarharalanov.chatguard.core.misc.TimeFormatter;
 import io.github.aleksandarharalanov.chatguard.core.security.captcha.CaptchaDetector;
 import io.github.aleksandarharalanov.chatguard.core.security.captcha.CaptchaHandler;
 import io.github.aleksandarharalanov.chatguard.core.security.filter.ContentFilter;
+import io.github.aleksandarharalanov.chatguard.core.security.penalty.MuteEnforcer;
 import io.github.aleksandarharalanov.chatguard.core.security.spam.ChatRateLimiter;
 import io.github.aleksandarharalanov.chatguard.util.auth.AccessUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -20,7 +18,7 @@ public class PlayerChatListener extends PlayerListener {
     public void onPlayerChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
 
-        if (isPlayerEssentialsMuted(player, event)) return;
+        if (isPlayerMuted(player, event)) return;
         if (hasBypassPermission(player)) return;
         if (handleActiveCaptchaVerification(player, event)) return;
         if (handleSpamPrevention(player, event)) return;
@@ -28,15 +26,13 @@ public class PlayerChatListener extends PlayerListener {
         if (handleCaptchaTriggerCheck(player, event)) return;
     }
 
-    private static boolean isPlayerEssentialsMuted(Player player, PlayerChatEvent event) {
-        Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-        if (essentials != null && essentials.isEnabled()) {
-            User user = essentials.getUser(player.getName());
-            if (user.isMuted()) {
-                TimeFormatter.printFormattedMuteDuration(user);
-                event.setCancelled(true);
-                return true;
-            }
+    private static boolean isPlayerMuted(Player player, PlayerChatEvent event) {
+        if (MuteEnforcer.muteHandler == null) return false;
+
+        if (MuteEnforcer.muteHandler.isUserMuted(player.getName())) {
+            TimeFormatter.printFormattedMuteDuration(player.getName());
+            event.setCancelled(true);
+            return true;
         }
         return false;
     }
