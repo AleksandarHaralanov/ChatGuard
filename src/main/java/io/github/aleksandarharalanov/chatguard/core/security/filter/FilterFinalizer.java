@@ -15,7 +15,7 @@ public final class FilterFinalizer {
 
     private FilterFinalizer() {}
 
-    public static void finalizeActions(LogType logType, Player player, String content, String trigger) {
+    public static void finalizeActions(LogType logType, Player player, String content, FilterResult result) {
         if (shouldWarnPlayer(logType)) {
             player.sendMessage(ColorUtil.translateColorCodes(getWarningMessage(logType)));
         }
@@ -23,7 +23,11 @@ public final class FilterFinalizer {
         AudioCuePlayer.play(logType, player, false);
         ConsoleLogger.log(logType, player, content);
         FileLogger.log(logType, player, content);
-        DiscordLogger.log(logType, player, content, trigger);
+
+        // Underline the match for easier troubleshooting
+        content = content.replaceFirst(result.getMatch(), String.format("__%s__", result.getMatch()));
+        DiscordLogger.log(logType, player, content, result.getTrigger());
+
         PenaltyEnforcer.processMute(logType, player);
         PenaltyEnforcer.incrementStrikeTier(logType, player);
     }
