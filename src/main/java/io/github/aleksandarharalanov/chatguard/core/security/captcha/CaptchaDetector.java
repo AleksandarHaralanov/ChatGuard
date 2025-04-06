@@ -11,7 +11,7 @@ public final class CaptchaDetector {
     private CaptchaDetector() {}
 
     public static boolean doesPlayerTriggerCaptcha(String playerName, String content) {
-        String sanitizedContent = ContentHandler.sanitizeContent(content, CaptchaConfig.getTermsWhitelist(), CaptchaConfig.getRegexWhitelist());
+        String sanitizedContent = ContentHandler.sanitize(content, CaptchaConfig.getTermsWhitelist(), CaptchaConfig.getRegexWhitelist());
 
         if (sanitizedContent.isEmpty()) {
             return false;

@@ -12,7 +12,7 @@ public final class ContentHandler {
 
     private ContentHandler() {}
 
-    public static String sanitizeContent(String content, List<String> termsWhitelist, List<String> regexWhitelist) {
+    public static String sanitize(String content, List<String> termsWhitelist, List<String> regexWhitelist) {
         String sanitizedContent = content.toLowerCase();
 
         for (String term : termsWhitelist) {
@@ -32,7 +32,7 @@ public final class ContentHandler {
         return sanitizedContent.trim();
     }
 
-    public static String mergeContent(String[] content) {
+    public static String merge(String[] content) {
         return Stream.of(content)
                 .map(String::toLowerCase)
                 .collect(Collectors.joining(" "));
