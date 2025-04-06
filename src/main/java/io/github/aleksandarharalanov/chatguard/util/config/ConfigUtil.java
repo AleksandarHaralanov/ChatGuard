@@ -102,8 +102,6 @@ public final class ConfigUtil extends Configuration {
             }
 
             Files.copy(input, configFile.toPath());
-            logger.info(String.format("[%s] Default configuration '%s' created successfully.",
-                    pluginName, configFile.getName()));
         } catch (IOException e) {
             logger.severe(String.format("[%s] Failed to create default configuration '%s': %s",
                     pluginName, configFile.getName(), e.getMessage()));
