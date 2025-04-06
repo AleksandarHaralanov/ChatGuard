@@ -12,7 +12,7 @@ Configurable terms and regex patterns
 - ⏱️ Configurable rate-limits for chat messages and commands for each strike tier
 - 🤖 Triggers CAPTCHA verification for repeated message spam
 
-### Player Feedback & Notifications
+### Feedback & Notifications
 - 🔊 Plays audio cues to notify offending players when violations occur
 - 💬️ Sends warning messages to players explaining why content was blocked
 
