@@ -1,5 +1,6 @@
 package io.github.aleksandarharalanov.chatguard.command.subcommand;
 
+import io.github.aleksandarharalanov.chatguard.util.auth.AccessUtil;
 import io.github.aleksandarharalanov.chatguard.util.log.LogUtil;
 import io.github.aleksandarharalanov.chatguard.util.misc.ColorUtil;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,9 @@ public final class HelpCommand {
                 "&bChatGuard commands:",
                 "&e/cg &7- Displays this content.",
                 "&e/cg about &7- About ChatGuard.",
-                "&e/cg captcha <code> &7- Captcha verification.",
+                "&e/cg captcha <code> &7- Captcha verification."
+        };
+        String[] staffMessages = {
                 "&bChatGuard staff commands:",
                 "&e/cg reload &7- Reload ChatGuard config.",
                 "&e/cg strike <username> &7- View strike of player.",
@@ -24,6 +27,14 @@ public final class HelpCommand {
                 sender.sendMessage(ColorUtil.translateColorCodes(message));
             } else {
                 LogUtil.logConsoleInfo(message.replaceAll("&.", ""));
+            }
+        }
+
+        for (String staffMessage : staffMessages) {
+            if (sender instanceof Player && AccessUtil.senderHasPermission(sender, "chatguard.config")) {
+                sender.sendMessage(ColorUtil.translateColorCodes(staffMessage));
+            } else {
+                LogUtil.logConsoleInfo(staffMessage.replaceAll("&.", ""));
             }
         }
     }
