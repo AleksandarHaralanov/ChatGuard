@@ -14,7 +14,7 @@ public final class FilterHandler {
     }
 
     public static boolean isSignContentBlocked(Player player, String[] content) {
-        return isBlocked(LogType.SIGN, player, ContentHandler.mergeContent(content));
+        return isBlocked(LogType.SIGN, player, ContentHandler.merge(content));
     }
 
     public static boolean isPlayerNameBlocked(Player player) {
@@ -22,14 +22,14 @@ public final class FilterHandler {
     }
 
     private static boolean isBlocked(LogType logType, Player player, String content) {
-        String sanitizedContent = ContentHandler.sanitizeContent(content, FilterConfig.getTermsWhitelist(), FilterConfig.getRegexWhitelist());
-        String trigger = FilterDetector.getTrigger(sanitizedContent);
+        String sanitizedContent = ContentHandler.sanitize(content, FilterConfig.getTermsWhitelist(), FilterConfig.getRegexWhitelist());
+        FilterResult result = FilterDetector.detect(sanitizedContent);
 
-        if (trigger == null) {
+        if (result == null) {
             return false;
         }
 
-        FilterFinalizer.finalizeActions(logType, player, content, trigger);
+        FilterFinalizer.finalizeActions(logType, player, content, result);
         return true;
     }
 }
