@@ -49,7 +49,7 @@ public final class CaptchaCommand implements CommandExecutor {
         CaptchaConfig.removePlayerCaptcha(player.getName());
 
         AudioCuePlayer.play(LogType.CAPTCHA, player, true);
-        LogUtil.logConsoleInfo(String.format("[ChatGuard] Player '%s' passed captcha verification.", player.getName()));
+        LogUtil.logConsoleInfo(String.format("[ChatGuard] Player %s passed captcha verification.", player.getName()));
 
         return true;
     }
