@@ -37,8 +37,7 @@ For any issues with the plugin, or suggestions, please submit them [here](https:
 
 ---
 ## ⬇️ Download
-Latest releases of **ChatGuard** can be found here on [GitHub](https://github.com/AleksandarHaralanov/ChatGuard/releases).<br/>
-Alternatively, you can also download through [Modrinth](https://modrinth.com/plugin/chatguard/versions).
+Latest releases of **ChatGuard** can be found here on [GitHub](https://github.com/AleksandarHaralanov/ChatGuard/releases/latest).<br/>
 
 The plugin is fully open-source and transparent.<br/>
 If you'd like additional peace of mind, you're welcome to scan the `.jar` file using [VirusTotal](https://www.virustotal.com/gui/home/upload).
