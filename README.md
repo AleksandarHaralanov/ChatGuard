@@ -160,7 +160,7 @@ customize:               # Embed customization options
 
 > [!WARNING]
 > Install a compatible plugin to use the auto mute feature.
-> - Compatible plugins are [Essentials v2.5.8](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar) and [ZCore]([https://github.com/zavdav/ZCore](https://github.com/zcoreplugin/zcore)) (as of ChatGuard `v6.0.0`).
+> - Compatible plugins are [Essentials v2.5.8](https://github.com/AleksandarHaralanov/ChatGuard/raw/refs/heads/master/libs/Essentials.jar) and [ZCore]([https://github.com/zcoreplugin/zcore) (as of ChatGuard `v6.0.0`).
 >
 > If `auto-mute.enabled` in `config/config.yml` is left on `true`, it will act as disabled when no compatible plugins are detected.
 
