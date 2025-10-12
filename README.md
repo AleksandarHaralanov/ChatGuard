@@ -53,20 +53,22 @@ By default, only OPs have permission.
 Use PermissionsEx or similar plugins to grant groups the permission, enabling the commands.
 
 ### Commands:
-- `/cg` - View ChatGuard commands.
-- `/cg about` - About ChatGuard.
-- `/cg captcha <code>` - Captcha verification.
-- `/cg reload` - `chatguard.config` - Reload ChatGuard configuration.
-- `/cg strike <username>` - `chatguard.config` - View strike of player.
-- `/cg strike <username> [0-5]` - `chatguard.config` - Set strike of player.
+| Command | Permission | Description |
+|---------|------------|-------------|
+| `/cg` | None | View ChatGuard commands. |
+| `/cg about` | None | About ChatGuard. |
+| `/cg captcha <code>` | None | Captcha verification. |
+| `/cg reload` | `chatguard.config` | Reload ChatGuard configuration. |
+| `/cg strike <username>` | `chatguard.config` | View strike of player. |
+| `/cg strike <username> [0-5]` | `chatguard.config` | Set strike of player. |
 
 ### Permissions:
-#### Single permissions:
-- `chatguard.bypass` - Allows player to bypass the ChatGuard protection.
-- `chatguard.config` - Allows player to reload and modify the ChatGuard configuration.
-- `chatguard.captcha` - Allows player to be notified when someone is prompted a captcha verification.
-#### Wildcard permissions:
-- `chatguard.*` - Wildcard permission that grants all permissions.
+| Permission | Description |
+|------------|-------------|
+| `chatguard.*` | Wildcard permission that grants all permissions. |
+| `chatguard.bypass` | Allows player to bypass the ChatGuard protection. |
+| `chatguard.config` | Allows player to reload and modify the ChatGuard configuration. |
+| `chatguard.captcha` | Allows player to be notified when someone is prompted a captcha verification. |
 
 ---
 ## ⚙️ Configurations
