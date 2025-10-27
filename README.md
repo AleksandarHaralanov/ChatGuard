@@ -1,6 +1,11 @@
 # 🛡️ ChatGuard
 ![ChatGuard-Banner.png](assets/ChatGuard-Banner.png)
 
+![Software](https://img.shields.io/badge/build-craftbukkit1060-purple)
+![Version](https://img.shields.io/github/v/release/AleksandarHaralanov/ChatGuard?display_name=tag&sort=semver)
+![Downloads](https://img.shields.io/github/downloads/AleksandarHaralanov/ChatGuard/total?color=green)
+![License](https://img.shields.io/github/license/AleksandarHaralanov/ChatGuard)
+
 ## ✨ Features
 ### Content Filtering
 Configurable terms and regex patterns
